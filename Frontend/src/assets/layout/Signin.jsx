@@ -1,151 +1,65 @@
-const Signup = () => {
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../AuthContext";
+
+const Signin = () => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const { isAuthenticated, login } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.email.trim() || !formData.password.trim()) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    login();
+    navigate("/home", { replace: true });
+  };
+
   return (
     <div id="signin" className="bg-black min-h-screen flex items-center justify-center px-4">
-      {/* OUTER GLOW BORDER */}
-      <div
-        className="
-        group relative
-        w-full max-w-95
-        p-0.5
-        rounded-2xl
-        bg-linear-to-r
-        from-cyan-600
-        via-cyan-500
-        to-cyan-700
-        hover:scale-105
-        transition duration-500
-        "
-      >
-        {/* CARD */}
-        <div
-          className="
-          bg-black
-          rounded-2xl
-          p-8
-          text-white
-          shadow-2xl
-          group-hover:bg-linear-to-br
-          group-hover:from-black
-          group-hover:to-cyan-950
-          transition duration-500
-          "
-        >
-          {/* HEADING */}
-          <h1 className="text-3xl font-bold text-center mb-2">
-            Create Your Account
-          </h1>
+      <div className="group relative w-full max-w-95 p-0.5 rounded-2xl bg-linear-to-r from-cyan-600 via-cyan-500 to-cyan-700 hover:scale-105 transition duration-500">
+        <div className="bg-black rounded-2xl p-8 text-white shadow-2xl group-hover:bg-linear-to-br group-hover:from-black group-hover:to-cyan-950 transition duration-500">
+          <h1 className="text-3xl font-bold text-center mb-2">Sign In</h1>
+          <p className="text-gray-400 text-center mb-6">Access your account to explore the site.</p>
 
-          <p className="text-gray-400 text-center mb-6">Join us today!</p>
-
-          {/* INPUTS */}
-          <div className="space-y-4">
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="
-              w-full
-              p-3
-              rounded-lg
-              bg-black
-              border border-cyan-600
-              focus:outline-none
-              focus:ring-2
-              focus:ring-cyan-500
-              hover:border-cyan-400
-              transition
-              "
-            />
-
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <input
               type="email"
               placeholder="Email Address"
-              className="
-              w-full
-              p-3
-              rounded-lg
-              bg-black
-              border border-cyan-600
-              focus:outline-none
-              focus:ring-2
-              focus:ring-cyan-500
-              hover:border-cyan-400
-              transition
-              "
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full p-3 rounded-lg bg-black border border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 hover:border-cyan-400 transition"
             />
-
             <input
               type="password"
               placeholder="Password"
-              className="
-              w-full
-              p-3
-              rounded-lg
-              bg-black
-              border border-cyan-600
-              focus:outline-none
-              focus:ring-2
-              focus:ring-cyan-500
-              hover:border-cyan-400
-              transition
-              "
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="w-full p-3 rounded-lg bg-black border border-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 hover:border-cyan-400 transition"
             />
 
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="
-              w-full
-              p-3
-              rounded-lg
-              bg-black
-              border border-cyan-600
-              focus:outline-none
-              focus:ring-2
-              focus:ring-cyan-500
-              hover:border-cyan-400
-              transition
-              "
-            />
-          </div>
+            {error && <p className="text-red-400 text-sm">{error}</p>}
 
-          {/* BUTTON */}
-          <button
-            className="
-            mt-6
-            w-full
-            py-3
-            rounded-lg
-            font-bold
-            bg-cyan-600
-            hover:bg-cyan-500
-            shadow-lg
-            shadow-cyan-600/50
-            hover:shadow-cyan-500/80
-            hover:scale-105
-            transition duration-300
-            "
-          >
-            Sign Up
-          </button>
-
-          {/* LOGIN */}
-          <p className="text-gray-400 text-sm text-center mt-4">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="
-              text-cyan-500
-              hover:text-cyan-300
-              transition
-              "
+            <button
+              type="submit"
+              className="mt-6 w-full py-3 rounded-lg font-bold bg-cyan-600 hover:bg-cyan-500 shadow-lg shadow-cyan-600/50 hover:shadow-cyan-500/80 hover:scale-105 transition duration-300"
             >
-              Login here →
-            </a>
-          </p>
+              Sign In
+            </button>
+          </form>
         </div>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default Signin;
